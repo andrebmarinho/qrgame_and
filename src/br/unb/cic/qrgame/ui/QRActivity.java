@@ -45,7 +45,9 @@ public class QRActivity extends Activity {
 			startActivityForResult(actScan, 0); //requestCode: 0, Intent data: actScan
 			*/
 			code = new QRCode("", getBaseContext());
-			code.getImageFromCamera();
+			//code.getImageFromCamera();
+			String file = "/sdcard/QRcode.jpg";
+			Toast.makeText(this, code.decodeCode(code.imageToBmp(file)), Toast.LENGTH_SHORT).show();
 			
 		}
 		

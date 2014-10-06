@@ -6,5 +6,7 @@
     <string name="user">Usuário:</string>
     <string name="password">Senha:</string>
     <string name="enter">Enviar</string>
+    <string name="Atirar"></string>
+    <string name="Shoot">Atirar</string>
     
 </resources>

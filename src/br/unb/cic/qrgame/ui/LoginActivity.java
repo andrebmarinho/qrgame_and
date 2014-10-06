@@ -48,9 +48,9 @@ public class LoginActivity extends Activity {
 				}*/
 				
 				Intent qrActivity = new Intent(LoginActivity.this, QRActivity.class);
-	            qrActivity.putExtra("createQRCode", false);
+	            qrActivity.putExtra("createQRCode", true);
 	            qrActivity.putExtra("scanQRCode", true);
-	            qrActivity.putExtra("codigo", "Teste");
+	            qrActivity.putExtra("codigo", "br.unb.cic.qrgame.ui.testes.TESTANDO");
 				startActivity(qrActivity);
 				finish();
 	            

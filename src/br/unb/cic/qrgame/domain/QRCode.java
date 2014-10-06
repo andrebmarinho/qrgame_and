@@ -8,12 +8,15 @@ import java.io.IOException;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.hardware.Camera;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.widget.FrameLayout;
 import android.widget.Toast;
+import br.unb.cic.qrgame.R;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.BinaryBitmap;
@@ -61,20 +64,19 @@ public class QRCode {
 		    try{
 		    	this.saveBmp(bmp);
 		    } catch (FileNotFoundException eFile){
-		    	Toast.makeText(context, "Erro! " + eFile.getMessage(), Toast.LENGTH_LONG).show();
+		    	Toast.makeText(context, "Erro! " + eFile.getMessage(), Toast.LENGTH_SHORT).show();
 		    } catch (IOException eIO){
-		    	Toast.makeText(context, "Erro! " + eIO.getMessage(), Toast.LENGTH_LONG).show();
+		    	Toast.makeText(context, "Erro! " + eIO.getMessage(), Toast.LENGTH_SHORT).show();
 		    }
-		    
-		    
+		    		    
 		} catch (WriterException eEncoder) {
 						
-			Toast.makeText(context, "Erro! " + eEncoder.getMessage(), Toast.LENGTH_LONG).show();
+			Toast.makeText(context, "Erro! " + eEncoder.getMessage(), Toast.LENGTH_SHORT).show();
 		    //TODO: tratar essa exceção
 		    
 		} catch (Exception otherError){
 			
-			Toast.makeText(context, "Erro! " + otherError.getMessage(), Toast.LENGTH_LONG).show();
+			Toast.makeText(context, "Erro! " + otherError.getMessage(), Toast.LENGTH_SHORT).show();
 		    //TODO: tratar essa exceção
 			
 		}
@@ -95,9 +97,9 @@ public class QRCode {
 			saida = new FileOutputStream(new File(sd, "QRcode.jpg"));
 		    boolean salvo = bmp.compress(Bitmap.CompressFormat.JPEG, 100, saida);
 		    if (salvo){
-		    	Toast.makeText(context, "Arquivo QRcode.jpg salvo com sucesso!", Toast.LENGTH_LONG).show();
+		    	Toast.makeText(context, "Arquivo QRcode.jpg salvo com sucesso!", Toast.LENGTH_SHORT).show();
 		    } else {
-		    	Toast.makeText(context, "Não foi possível salvar o arquivo. Contate os desenvolvedores.", Toast.LENGTH_LONG).show();
+		    	Toast.makeText(context, "Não foi possível salvar o arquivo. Contate os desenvolvedores.", Toast.LENGTH_SHORT).show();
 		    }
 		    
 		} catch (FileNotFoundException e) {
@@ -124,15 +126,45 @@ public class QRCode {
 	public Bitmap getImageFromCamera(){
 		
 		Bitmap bmp = null;
-		Camera cam = null;
+//		Camera cam = null;
+//		CameraView camView;
+//		
+//		try{
+//			cam = Camera.open();
+//		}catch(Exception eCam){
+//			//TODO: tratar
+//			Toast.makeText(context, "Erro! " + eCam.getMessage(), Toast.LENGTH_SHORT).show();
+//			
+//		}
+//		if(cam != null){
+//			
+//			camView = new CameraView(context, cam);
+//			FrameLayout preview = (FrameLayout) getView().findViewById(R.id.scanner);
+//	        preview.addView(camView);
+//			
+//		}			
 		
+		return bmp;
+		
+	}
+	
+	public Bitmap imageToBmp(String filePath){
+		
+		Bitmap bmp = null;
+		
+		File arquivo = new File(filePath);
+			if(!arquivo.exists()) 
+				Toast.makeText(context, "Arquivo não encontrado.", Toast.LENGTH_SHORT).show();
+			
 		try{
-			cam = Camera.open();
-		}catch(Exception e){
-			//TODO: tratar
-		}
-		if(cam != null)
-			cam.startPreview();
+			
+			bmp = BitmapFactory.decodeFile(filePath);
+			
+		} catch (Exception eFile) {
+			
+			//TODO: tratar essa exceção
+		    		    
+		} 
 		
 		return bmp;
 		
@@ -153,8 +185,8 @@ public class QRCode {
 				
 		try {
 			qrCodeMsg = new MultiFormatReader().decode(bBmp);
-		} catch (NotFoundException eFile) {
-			Toast.makeText(context, "Erro! " + eFile.getMessage(), Toast.LENGTH_LONG).show();
+		} catch (Exception eFile) {
+			Toast.makeText(context, "Erro! " + eFile.getMessage(), Toast.LENGTH_SHORT).show();
 			//TODO: tratar essa exceção.
 		}
 		
