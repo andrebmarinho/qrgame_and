@@ -6,9 +6,13 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.hardware.Camera;
+import android.net.Uri;
 import android.os.Environment;
+import android.provider.MediaStore;
 import android.widget.Toast;
 
 import com.google.zxing.BarcodeFormat;
@@ -17,9 +21,9 @@ import com.google.zxing.MultiFormatReader;
 import com.google.zxing.NotFoundException;
 import com.google.zxing.RGBLuminanceSource;
 import com.google.zxing.Result;
-import com.google.zxing.WriterException;
-import com.google.zxing.common.BitMatrix;
 import com.google.zxing.common.HybridBinarizer;
+import com.google.zxing.common.BitMatrix;
+import com.google.zxing.WriterException;
 import com.google.zxing.qrcode.QRCodeWriter;
 
 public class QRCode {
@@ -77,7 +81,7 @@ public class QRCode {
 				
 	}
 	
-	/** Salva a imagem do qrcode na memória interna do dispositivo
+	/** Salva a imagem do qrcode na memória externa do dispositivo
 	 * @throws FileNotFoundException, IOException
 	 */
 	
@@ -114,6 +118,23 @@ public class QRCode {
 	    		//TODO: tratar essa exceção
 		        
 		    }
+		
+	}
+	
+	public Bitmap getImageFromCamera(){
+		
+		Bitmap bmp = null;
+		Camera cam = null;
+		
+		try{
+			cam = Camera.open();
+		}catch(Exception e){
+			//TODO: tratar
+		}
+		if(cam != null)
+			cam.startPreview();
+		
+		return bmp;
 		
 	}
 	

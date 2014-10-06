@@ -48,10 +48,11 @@ public class LoginActivity extends Activity {
 				}*/
 				
 				Intent qrActivity = new Intent(LoginActivity.this, QRActivity.class);
-	            qrActivity.putExtra("createQRCode", true);
-	            qrActivity.putExtra("scanQRCode", false);
+	            qrActivity.putExtra("createQRCode", false);
+	            qrActivity.putExtra("scanQRCode", true);
 	            qrActivity.putExtra("codigo", "Teste");
 				startActivity(qrActivity);
+				finish();
 	            
 			}
 		});
