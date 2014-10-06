@@ -26,7 +26,7 @@ public class QRActivity extends Activity {
 		if (parametros != null){
 			
 			this.createQRCode = parametros.getBoolean("createQRCode");
-			this.qrText = new String(parametros.getString("codigo"));
+			this.qrText = parametros.getString("codigo");
 			this.scanQRCode = parametros.getBoolean("scanQRCode");
 			
 		}
@@ -40,29 +40,31 @@ public class QRActivity extends Activity {
 		
 		if(scanQRCode){
 			
-			Intent actScan = new Intent("com.google.zxing.client.android.SCAN"); //Inicia a atividade SCAN, fornecida pela API zxing
+			/*Intent actScan = new Intent("com.google.zxing.client.android.SCAN"); //Inicia a atividade SCAN, fornecida pela API zxing
 			actScan.putExtra("SCAN_MODE", "QR_CODE_MODE");
-			try{
-				startActivityForResult(actScan, 0); //requestCode: 0, Intent data: actScan
-				//startActivity(actScan);
-			} catch (Exception e){
-				
-				Toast.makeText(QRActivity.this, "Erro: " +e.getMessage(), Toast.LENGTH_LONG).show();
-				
-			}					
+			startActivityForResult(actScan, 0); //requestCode: 0, Intent data: actScan
+			*/
+			code = new QRCode("", getBaseContext());
+			code.getImageFromCamera();
+			
 		}
 		
 	}
 	
-	@Override
+	/*@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent actScan) {	    
 	    if (requestCode == 0) {
 	        if (resultCode == RESULT_OK) {
+	        	
 	        	String target = actScan.getStringExtra("SCAN_RESULT");
 	        	Toast.makeText(QRActivity.this, target, Toast.LENGTH_LONG).show();
 
+	        } else {
+	        	
+	        	
+	        	
 	        }
 	    }
-	}
+	}*/
 	
 }
