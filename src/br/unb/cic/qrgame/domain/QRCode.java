@@ -6,22 +6,14 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.hardware.Camera;
-import android.net.Uri;
 import android.os.Environment;
-import android.provider.MediaStore;
-import android.widget.FrameLayout;
 import android.widget.Toast;
-import br.unb.cic.qrgame.R;
-
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.BinaryBitmap;
 import com.google.zxing.MultiFormatReader;
-import com.google.zxing.NotFoundException;
 import com.google.zxing.RGBLuminanceSource;
 import com.google.zxing.Result;
 import com.google.zxing.common.HybridBinarizer;
@@ -56,17 +48,23 @@ public class QRCode {
 			largura = matriz.getWidth();
 			bmp = Bitmap.createBitmap(largura, altura, Bitmap.Config.ARGB_8888);
 			
-			//Gera um bitmap (ARG_8888 - 4bytes por pixel) a partir da matriz (i,j) da palavra codificada
+			//Gera um bitmap (ARG_8888 - 4 bytes por pixel) a partir da matriz (i,j) da palavra codificada
 		    for (int j = 0; j < largura; j++)
 		        for (int i = 0; i < altura; i++)
 		            bmp.setPixel(j, i, matriz.get(j,i) ? Color.BLACK : Color.WHITE);
 		    
 		    try{
+		    	
 		    	this.saveBmp(bmp);
+		    	
 		    } catch (FileNotFoundException eFile){
+		    	
 		    	Toast.makeText(context, "Erro! " + eFile.getMessage(), Toast.LENGTH_SHORT).show();
+		  
 		    } catch (IOException eIO){
+		    
 		    	Toast.makeText(context, "Erro! " + eIO.getMessage(), Toast.LENGTH_SHORT).show();
+		   
 		    }
 		    		    
 		} catch (WriterException eEncoder) {

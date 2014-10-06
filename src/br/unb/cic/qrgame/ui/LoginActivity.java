@@ -28,7 +28,7 @@ public class LoginActivity extends Activity {
 		Button send = (Button) this.findViewById(R.id.buttonEnterLogin);
 		send.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View view) {
-				/*if ((userField.validator(LoginActivity.this, "\"Usuário\""))
+				if ((userField.validator(LoginActivity.this, "\"Usuário\""))
 						&& (passField
 								.validator(LoginActivity.this, "\"Senha\""))) {
 					XMPPClient client = new XMPPClient(LoginActivity.this);
@@ -45,12 +45,12 @@ public class LoginActivity extends Activity {
 						Toast.makeText(LoginActivity.this, e.getMessage(),
 								Toast.LENGTH_SHORT).show();
 					}
-				}*/
+				}
 				
 				Intent qrActivity = new Intent(LoginActivity.this, QRActivity.class);
 	            qrActivity.putExtra("createQRCode", true);
 	            qrActivity.putExtra("scanQRCode", true);
-	            qrActivity.putExtra("codigo", "br.unb.cic.qrgame.ui.testes.TESTANDO");
+	            qrActivity.putExtra("codigo", userField.getMsg());
 				startActivity(qrActivity);
 				finish();
 	            

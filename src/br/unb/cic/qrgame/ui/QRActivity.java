@@ -3,8 +3,9 @@ package br.unb.cic.qrgame.ui;
 import br.unb.cic.qrgame.R;
 import br.unb.cic.qrgame.domain.QRCode;
 import android.app.Activity;
-import android.content.Intent;
+//import android.content.Intent;
 import android.os.Bundle;
+import android.os.Environment;
 import android.widget.Toast;
 
 public class QRActivity extends Activity {
@@ -46,8 +47,8 @@ public class QRActivity extends Activity {
 			*/
 			code = new QRCode("", getBaseContext());
 			//code.getImageFromCamera();
-			String file = "/sdcard/QRcode.jpg";
-			Toast.makeText(this, code.decodeCode(code.imageToBmp(file)), Toast.LENGTH_SHORT).show();
+			String file = Environment.getExternalStorageDirectory().getPath() + "/QRcode.jpg";
+			Toast.makeText(this, "Decodificando qrcode gerado: " + code.decodeCode(code.imageToBmp(file)), Toast.LENGTH_SHORT).show();
 			
 		}
 		
