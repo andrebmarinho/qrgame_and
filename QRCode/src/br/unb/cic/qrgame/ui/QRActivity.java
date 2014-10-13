@@ -13,7 +13,7 @@ public class QRActivity extends Activity {
 	private boolean createQRCode = false; //Flag que determina se um qrcode deve ser criado ao chamar essa activity.
 	private boolean scanQRCode = false; //Flag que determina se o jogador está atirando em alguem ou não ao chamar essa activity.
 	String qrText = null;
-	//Sem parâmetros: não cria o QRCode, nem scaneia nenhum qrcode. 	
+	//Sem parâmetros: não cria o QRcode, nem scaneia nenhum QRcode. 	
 		
 	QRCode code; 	
 	
