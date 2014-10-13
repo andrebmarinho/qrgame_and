@@ -1,0 +1,5 @@
+INDEX VERSION 1.126+C:\Users\Andre\Desktop\QRGame\.metadata\.plugins\org.eclipse.jdt.core
+2944946138.index
+2876337973.index
+175856638.index
+1132094788.index
