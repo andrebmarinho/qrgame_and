@@ -141,7 +141,7 @@ public class QRCode {
 		
 	}
 	
-	/*
+	/**
 	 *  @Brief: método responsável por escanear, a partir da câmera, um possível Qr code.
 	 *  
 	 */
@@ -171,7 +171,7 @@ public class QRCode {
 		
 	}
 	
-	/*
+	/**
 	 * @Brief: converte uma imagem em um bitmap
 	 * 	A partir do endereço da imagem, o método decodifica uma imagem, se válida, em um bitmap.
 	 */
@@ -198,7 +198,7 @@ public class QRCode {
 		
 	}
 	
-	/*
+	/**
 	 *	@Brief: decodifica um bitmap de um QR code em uma string.
 	 *		A partir do bitmap de um possível QR code, o método obtém uma matriz binária dele e 
 	 *	decodifica o QR code em uma string.
