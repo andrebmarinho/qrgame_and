@@ -23,19 +23,19 @@ import com.google.zxing.qrcode.QRCodeWriter;
 
 public class QRCode {
 
-	private String user;
+	private String username;
 	private Context context;
 	
 	public QRCode(Context context){
 		
-		this.user = "";
+		this.username = "";
 		this.context = context;
 		
 	}
 	
 	public QRCode(String user, Context context){
 		
-		this.user = user;
+		this.username = user;
 		this.context = context;
 		
 	}
@@ -50,7 +50,7 @@ public class QRCode {
 		try {
 			
 			//Codifica o nome do usuário em uma matriz do tipo QR_CODE
-		    matriz = encoder.encode(this.user, BarcodeFormat.QR_CODE, 400, 400); 	
+		    matriz = encoder.encode(this.username, BarcodeFormat.QR_CODE, 400, 400); 	
 		    altura = matriz.getHeight();
 			largura = matriz.getWidth();
 			bmp = Bitmap.createBitmap(largura, altura, Bitmap.Config.ARGB_8888);
@@ -65,7 +65,7 @@ public class QRCode {
 		    	this.saveBmp(bmp);
 		    	
 		    } catch (FileNotFoundException eFile){
-		    	
+		    			    
 		    	Toast.makeText(context, "Erro! " + eFile.getMessage(), Toast.LENGTH_SHORT).show();
 		  
 		    } catch (IOException eIO){
