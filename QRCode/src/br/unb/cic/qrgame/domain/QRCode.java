@@ -40,6 +40,14 @@ public class QRCode {
 		
 	}
 	
+	/**
+	 *	@Brief: A partir de uma string, gera um QR code correspondente. 
+	 *		A string passada para o objeto (pelo username no construtor) é codificada em uma matriz
+	 *	do tipo QR code. A partir da matriz, é construído uma imagem bitmap do tipo ARG_8888.
+	 *	Essa imagem é comprimida em jpeg e salva pelo método saveBmp().
+	 *
+	 */
+	
 	public void encodeCode(){
 		
 		QRCodeWriter encoder = new QRCodeWriter();
@@ -88,8 +96,13 @@ public class QRCode {
 				
 	}
 	
-	/** Salva a imagem do qrcode na memória externa do dispositivo
+	/** 
+	 * @Brief: Salva a imagem do qrcode na memória externa do dispositivo.
+	 * 		A partir de um bitmap passado ao método, esse comprime a imagem para uma do tipo Jpeg
+	 * 	ao passo que a salva na memória externa do dispositivo utilizado.   
+	 * 
 	 * @throws FileNotFoundException, IOException
+	 * 		
 	 */
 	
 	public void saveBmp(Bitmap bmp) throws FileNotFoundException, IOException {
@@ -128,6 +141,11 @@ public class QRCode {
 		
 	}
 	
+	/*
+	 *  @Brief: método responsável por escanear, a partir da câmera, um possível Qr code.
+	 *  
+	 */
+	
 	public Bitmap getImageFromCamera(){
 		
 		Bitmap bmp = null;
@@ -153,6 +171,11 @@ public class QRCode {
 		
 	}
 	
+	/*
+	 * @Brief: converte uma imagem em um bitmap
+	 * 	A partir do endereço da imagem, o método decodifica uma imagem, se válida, em um bitmap.
+	 */
+	
 	public Bitmap imageToBmp(String filePath){
 		
 		Bitmap bmp = null;
@@ -174,6 +197,13 @@ public class QRCode {
 		return bmp;
 		
 	}
+	
+	/*
+	 *	@Brief: decodifica um bitmap de um QR code em uma string.
+	 *		A partir do bitmap de um possível QR code, o método obtém uma matriz binária dele e 
+	 *	decodifica o QR code em uma string.
+	 *
+	 */
 	
 	public String decodeCode(Bitmap bmp){
 		
