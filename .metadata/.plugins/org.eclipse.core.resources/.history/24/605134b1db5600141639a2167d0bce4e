@@ -1,0 +1,104 @@
+package br.unb.cic.qrgame.ui;
+
+import java.io.IOException;
+import java.util.List;
+
+import br.unb.cic.qrgame.R;
+import br.unb.cic.qrgame.domain.QRCode;
+import android.app.Activity;
+import android.graphics.Bitmap;
+import android.hardware.Camera;
+import android.hardware.Camera.Size;
+import android.os.Bundle;
+import android.view.SurfaceHolder;
+import android.view.SurfaceView;
+import android.widget.Toast;
+
+public class ShootActivity extends Activity implements SurfaceHolder.Callback{
+			
+	QRCode code;
+	Camera camera;
+	SurfaceView surfV;
+	
+	@Override
+	protected void onCreate(Bundle savedInstanceState){
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_shoot);
+		
+		this.scanQRCode();
+		
+	}
+	
+	/**
+	 * 
+	 */
+	protected void scanQRCode(){
+		
+		code = new QRCode(getBaseContext());
+		Bitmap bmp = null;
+		bmp = this.startScan();
+		//String file = Environment.getExternalStorageDirectory().getPath() + "/QRcode.jpg";
+		//Toast.makeText(this, "Decodificando qrcode gerado: " + code.decodeCode(code.imageToBmp(file)), Toast.LENGTH_SHORT).show();
+		//Toast.makeText(this, "Decodificando qrcode gerado: " + code.decodeCode(bmp), Toast.LENGTH_SHORT).show();
+				
+	}
+	
+	/**
+	 * 
+	 * @return
+	 */
+	public Bitmap startScan(){
+		
+		Bitmap bmp = null;
+				
+		surfV = (SurfaceView)findViewById(R.id.scannerView);
+		surfV.getHolder().addCallback(this);
+		//surfV.getHolder().setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS); 
+        camera = Camera.open();
+		
+		return bmp;
+		
+	}
+
+	/**
+	 * 
+	 */
+	@Override
+	public void surfaceChanged(SurfaceHolder holder, int formato, int largura, int altura) {
+		
+		Camera.Parameters parametros = camera.getParameters();
+        List<Size> dimensoes = parametros.getSupportedPreviewSizes();
+        largura = dimensoes.get(0).width;
+        altura = dimensoes.get(0).height;
+        parametros.setPreviewSize(largura, altura);
+        drawScanRect(largura, altura);
+        camera.setParameters(parametros);
+        camera.startPreview();
+		
+	}
+	
+	/**
+	 * 
+	 */
+	@Override
+	public void surfaceCreated(SurfaceHolder holder) {
+		 try {
+			camera.setPreviewDisplay(surfV.getHolder());
+		} catch (IOException e) {
+			Toast.makeText(this, "Erro na visualização da câmera! " + e.getMessage(), Toast.LENGTH_SHORT).show();
+		}		
+	}
+	
+	/**
+	 * 
+	 */
+	@Override
+	public void surfaceDestroyed(SurfaceHolder holder) {
+		// TODO Auto-generated method stub		
+	}
+	
+}
+	
+	
+
+

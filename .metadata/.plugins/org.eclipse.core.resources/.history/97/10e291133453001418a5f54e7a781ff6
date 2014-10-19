@@ -1,0 +1,32 @@
+package br.unb.cic.qrgame.domain;
+
+import junit.framework.TestCase;
+
+public class TesteQRCode extends TestCase {
+
+	public void testQRCodeEncodeDecode() {
+		
+		QRCode code = new QRCode("Usuario Teste", null);
+		code.encodeCode();
+		
+	}
+		
+	/*public void testQRCodeBmpSave() {
+		
+		
+		
+	}
+	
+	public void testImagetoBmp() {
+		
+		
+		
+	}
+	
+	public void testQRCodeDecode() {
+		
+		
+		
+	}*/
+	
+}

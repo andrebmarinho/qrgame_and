@@ -11,6 +11,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Environment;
 import android.widget.Toast;
+
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.BinaryBitmap;
 import com.google.zxing.MultiFormatReader;
@@ -23,26 +24,35 @@ import com.google.zxing.qrcode.QRCodeWriter;
 
 public class QRCode {
 
-	private String username;
+	private String qrText;
 	private Context context;
 	
+	/**
+	 * @Brief: Construtor de quando não é necessário gerar um QRCode, apenas escanear algum.
+	 * @param context
+	 */
 	public QRCode(Context context){
 		
-		this.username = "";
+		this.qrText = "";
 		this.context = context;
 		
 	}
 	
-	public QRCode(String user, Context context){
+	/**
+	 * @Brief: Construtor de quando é necessário gerar um QRCode.
+	 * @param qrText
+	 * @param context
+	 */
+	public QRCode(String qrText, Context context){
 		
-		this.username = user;
+		this.qrText = qrText;
 		this.context = context;
 		
 	}
 	
 	/**
 	 *	@Brief: A partir de uma string, gera um QR code correspondente. 
-	 *		A string passada para o objeto (pelo username no construtor) é codificada em uma matriz
+	 *		A string passada para o objeto é codificada em uma matriz
 	 *	do tipo QR code. A partir da matriz, é construído uma imagem bitmap do tipo ARG_8888.
 	 *	Essa imagem é comprimida em jpeg e salva pelo método saveBmp().
 	 *
@@ -58,16 +68,11 @@ public class QRCode {
 		try {
 			
 			//Codifica o nome do usuário em uma matriz do tipo QR_CODE
-		    matriz = encoder.encode(this.username, BarcodeFormat.QR_CODE, 400, 400); 	
+		    matriz = encoder.encode(this.qrText, BarcodeFormat.QR_CODE, 400, 400); 	
 		    altura = matriz.getHeight();
 			largura = matriz.getWidth();
-			bmp = Bitmap.createBitmap(largura, altura, Bitmap.Config.ARGB_8888);
-			
-			//Gera um bitmap (ARG_8888 - 4 bytes por pixel) a partir da matriz (i,j) da palavra codificada
-		    for (int j = 0; j < largura; j++)
-		        for (int i = 0; i < altura; i++)
-		            bmp.setPixel(j, i, matriz.get(j,i) ? Color.BLACK : Color.WHITE);
-		    
+			bmp = createQRCBmp(matriz, largura, altura);
+					    
 		    try{
 		    	
 		    	this.saveBmp(bmp);
@@ -85,15 +90,33 @@ public class QRCode {
 		} catch (WriterException eEncoder) {
 						
 			Toast.makeText(context, "Erro! " + eEncoder.getMessage(), Toast.LENGTH_SHORT).show();
-		    //TODO: tratar essa exceção
-		    
+				    
 		} catch (Exception otherError){
 			
 			Toast.makeText(context, "Erro! " + otherError.getMessage(), Toast.LENGTH_SHORT).show();
-		    //TODO: tratar essa exceção
-			
+					
 		}
 				
+	}
+		
+	/**
+	 * @Brief: a partir da matriz recebida, um bitmap de altura "altura" e largura "largura" é gerado.
+	 * @param matriz
+	 * @param largura
+	 * @param altura
+	 * @return
+	 */
+	protected Bitmap createQRCBmp(BitMatrix matriz, int largura, int altura){
+		
+		Bitmap bmp = Bitmap.createBitmap(largura, altura, Bitmap.Config.ARGB_8888);
+		
+		//Gera um bitmap (ARG_8888 - 4 bytes por pixel) a partir da matriz (i,j) da palavra codificada
+	    for (int j = 0; j < largura; j++)
+	        for (int i = 0; i < altura; i++)
+	            bmp.setPixel(j, i, matriz.get(j,i) ? Color.BLACK : Color.WHITE);
+	    
+	    return bmp;
+		
 	}
 	
 	/** 
@@ -123,7 +146,6 @@ public class QRCode {
 		} catch (FileNotFoundException e) {
 			
 			throw new FileNotFoundException("Erro ao salvar o arquivo! " + e.getMessage());
-		    //TODO: tratar essa exceção
 		    		    
 		} 
 		
@@ -135,47 +157,17 @@ public class QRCode {
 	    	} catch (IOException e) {
 		    	
 	    		throw new IOException("Erro ao salvar o arquivo! " + e.getMessage());
-	    		//TODO: tratar essa exceção
 		        
 		    }
 		
 	}
-	
-	/**
-	 *  @Brief: método responsável por escanear, a partir da câmera, um possível Qr code.
-	 *  
-	 */
-	
-	public Bitmap getImageFromCamera(){
-		
-		Bitmap bmp = null;
-//		Camera cam = null;
-//		CameraView camView;
-//		
-//		try{
-//			cam = Camera.open();
-//		}catch(Exception eCam){
-//			//TODO: tratar
-//			Toast.makeText(context, "Erro! " + eCam.getMessage(), Toast.LENGTH_SHORT).show();
-//			
-//		}
-//		if(cam != null){
-//			
-//			camView = new CameraView(context, cam);
-//			FrameLayout preview = (FrameLayout) getView().findViewById(R.id.scanner);
-//	        preview.addView(camView);
-//			
-//		}			
-		
-		return bmp;
-		
-	}
-	
+
 	/**
 	 * @Brief: converte uma imagem em um bitmap
 	 * 	A partir do endereço da imagem, o método decodifica uma imagem, se válida, em um bitmap.
-	 */
-	
+	 * @param filePath
+	 * @return bmp
+	 */	
 	public Bitmap imageToBmp(String filePath){
 		
 		Bitmap bmp = null;
@@ -205,18 +197,19 @@ public class QRCode {
 	 *
 	 */
 	
+	/**
+	 * 	@Brief: decodifica um bitmap de um QR code em uma string.
+	 *	A partir do bitmap de um possível QR code, o método obtém uma matriz binária dele e decodifica o QR code em uma string.
+	 * @param bmp
+	 * @return
+	 */
 	public String decodeCode(Bitmap bmp){
 		
-		int altura = bmp.getHeight();
-		int largura = bmp.getWidth(); 
-        int[] matriz = new int[altura * largura];
+		
         Result qrCodeMsg = null;
         String erro = new String("Erro na decodificação do código. Tente novamente.");
+        BinaryBitmap bBmp = binaryBmpFromBmp(bmp); 
         
-        bmp.getPixels(matriz, 0, largura, 0, 0, largura, altura);
-        bmp.recycle();
-        RGBLuminanceSource ilumRGB = new RGBLuminanceSource(largura, altura, matriz);
-        BinaryBitmap bBmp = new BinaryBitmap(new HybridBinarizer(ilumRGB));
 				
 		try {
 			qrCodeMsg = new MultiFormatReader().decode(bBmp);
@@ -229,6 +222,26 @@ public class QRCode {
 			return qrCodeMsg.getText();
 		else
 			return(erro);
+		
+	}
+	
+	/**
+	 * 
+	 * @Brief: Gerar um bitmap binário, para a decodificação do QR code.
+	 * @param bmp
+	 * @return bBmp
+	 */
+	protected BinaryBitmap binaryBmpFromBmp(Bitmap bmp){
+		
+		int altura = bmp.getHeight();
+		int largura = bmp.getWidth(); 
+        int[] matriz = new int[altura * largura];
+		bmp.getPixels(matriz, 0, largura, 0, 0, largura, altura);
+        bmp.recycle();
+        RGBLuminanceSource ilumRGB = new RGBLuminanceSource(largura, altura, matriz);
+        BinaryBitmap bBmp = new BinaryBitmap(new HybridBinarizer(ilumRGB));
+        
+        return bBmp;
 		
 	}
 	

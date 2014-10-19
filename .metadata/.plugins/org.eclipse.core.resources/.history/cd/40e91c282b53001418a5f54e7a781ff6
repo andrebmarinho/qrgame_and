@@ -1,0 +1,66 @@
+package br.unb.cic.qrgame.ui.Test;
+
+import java.io.File;
+
+import br.unb.cic.qrgame.ui.QRActivity;
+import android.content.Intent;
+import android.app.Activity;
+import android.os.Environment;
+import android.test.ActivityInstrumentationTestCase2;
+
+public class QRActivityTest extends ActivityInstrumentationTestCase2<QRActivity> {
+
+	Activity atividadeEmTeste = null;
+	File sd = Environment.getExternalStorageDirectory();
+	
+	public QRActivityTest() {
+		
+		super("br.unb.cic.qrgame.ui", QRActivity.class);
+		
+	}
+	
+	protected void setUp() throws Exception {
+		
+		super.setUp();
+				
+	}
+
+	/**
+	 * 
+	 * 
+	 */
+	
+	public void testActivityQRCode1(){
+		
+		//Teste 1:
+		Intent intqrAct = new Intent(getInstrumentation().getTargetContext(), QRActivity.class);		
+		intqrAct.putExtra("createQRCode", true);
+		intqrAct.putExtra("scanQRCode", true);
+		intqrAct.putExtra("codigo", "Usuario Teste.");
+        setActivityIntent(intqrAct);
+        atividadeEmTeste = getActivity();
+        assertNotNull(atividadeEmTeste);
+        //TODO: Outras assertivas para esse teste.
+	
+        //Remove o QRCode gerado
+        File qrC = new File(sd, "QRcode.jpg");
+        boolean remove = qrC.delete();
+        assertEquals(remove, true);
+        
+	}
+	
+	/*public void testActivityQRCode2(){
+		
+		//Teste 2:
+		Intent intqrAct = new Intent(getInstrumentation().getTargetContext(), QRActivity.class);		
+		intqrAct.putExtra("createQRCode", false);
+		intqrAct.putExtra("scanQRCode", true);
+		intqrAct.putExtra("codigo", "Usuario Teste.");
+        setActivityIntent(intqrAct);
+        atividadeEmTeste = getActivity();
+        assertNotNull(atividadeEmTeste);
+        //TODO: Outras assertivas para esse teste.
+		
+	}*/
+	
+}

@@ -17,10 +17,9 @@
         
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
-        android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:label="@string/app_name" >
         <activity
-            android:name="br.unb.cic.qrgame.ui.QRActivity"
+            android:name="br.unb.cic.qrgame.ui.ShootActivity"
             android:screenOrientation="landscape"
             android:label="@string/app_name">
             <intent-filter >
@@ -28,7 +27,7 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>     
+        </activity>  
         
     </application>
 

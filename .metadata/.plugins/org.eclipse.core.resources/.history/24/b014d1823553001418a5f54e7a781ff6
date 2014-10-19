@@ -1,0 +1,18 @@
+package br.unb.cic.qrgame.domain.test;
+
+import android.os.Environment;
+import android.test.InstrumentationTestCase;
+import br.unb.cic.qrgame.domain.QRCode;
+
+public class QRCodeTest extends InstrumentationTestCase {
+
+	public void testQRCodeEncodeDecode() {
+		
+		QRCode code = new QRCode("Usuario Teste", getInstrumentation().getContext());
+		code.encodeCode();
+		String file = Environment.getExternalStorageDirectory().getPath() + "/QRcode.jpg";
+		assertEquals("Usuario Teste", code.decodeCode(code.imageToBmp(file)));
+		
+	}
+	
+}

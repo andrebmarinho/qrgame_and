@@ -1,0 +1,9 @@
+package br.unb.cic.qrgame.ui.Test;
+
+import junit.framework.TestCase;
+
+public class QRActivityTest extends TestCase {
+
+	
+	
+}

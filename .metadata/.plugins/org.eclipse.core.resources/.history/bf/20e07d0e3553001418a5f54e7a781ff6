@@ -1,0 +1,15 @@
+package br.unb.cic.qrgame.domain.test;
+
+import br.unb.cic.qrgame.domain.QRCode;
+
+public class QRCodeTest {
+
+public void testQRCodeEncodeDecode() {
+		
+		QRCode code = new QRCode("Usuario Teste",null);
+		code.encodeCode();
+		assertEquals("Usuario Teste", code.decodeCode(bmp));
+		
+	}
+	
+}

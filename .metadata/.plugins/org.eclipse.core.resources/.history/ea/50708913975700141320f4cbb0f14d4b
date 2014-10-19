@@ -1,0 +1,8 @@
+package br.unb.cic.qrgame.ui.Test;
+
+import android.test.ActivityInstrumentationTestCase2;
+import br.unb.cic.qrgame.ui.ShootActivity;
+
+public class ShootActivityTest extends ActivityInstrumentationTestCase2<ShootActivity> {
+
+}

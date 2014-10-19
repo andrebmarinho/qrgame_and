@@ -1,0 +1,5 @@
+package br.unb.cic.qrgame.dominio.Test;
+
+public class QRCodeTest {
+
+}

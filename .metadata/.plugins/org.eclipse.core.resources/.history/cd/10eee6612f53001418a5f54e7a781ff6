@@ -1,0 +1,31 @@
+package br.unb.cic.qrgame.domain;
+
+import junit.framework.TestCase;
+
+public class TesteQRCode extends TestCase {
+
+	public void testQRCodeEncode() {
+		
+		
+		
+	}
+	
+	public void testQRCodeDecode() {
+		
+		
+		
+	}
+	
+	public void testQRCodeBmpSave() {
+		
+		
+		
+	}
+	
+	public void testImagetoBmp() {
+		
+		
+		
+	}
+	
+}
