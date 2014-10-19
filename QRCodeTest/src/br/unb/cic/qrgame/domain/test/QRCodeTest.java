@@ -22,16 +22,31 @@ public class QRCodeTest extends InstrumentationTestCase {
 		Bitmap bmp = code.imageToBmp(arquivo);
 		assertNotNull(bmp);
 		
-		//Testa se a string obtida da imagem é a esperada.
-		String strDecodificada = code.decodeCode(bmp);		
-		assertEquals("Usuario Teste", strDecodificada);
-		
+		//Teste 1 - Testa se a string obtida da imagem é a esperada.
+		String strDecodificada;
+		try {
+			strDecodificada = code.decodeCode(bmp);
+			assertEquals("Usuario Teste", strDecodificada);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}		
+				
+		//Teste 2 - decodificar a partir de arquivo
+        String file = Environment.getExternalStorageDirectory().getPath() + "/QRcode.jpg";
+        try {
+			strDecodificada = code.decodeCode( code.imageToBmp(file) );
+			assertEquals("Usuario Teste", strDecodificada);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}	
+        
 		//Remove o QRCode gerado
 		String sd = Environment.getExternalStorageDirectory().getPath();
         File qrC = new File(sd, "QRcode.jpg");
         boolean remove = qrC.delete();
         assertEquals(remove, true);
-		
+        
+        
 	}
 	
 }

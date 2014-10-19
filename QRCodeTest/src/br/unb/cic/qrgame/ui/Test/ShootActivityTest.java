@@ -31,6 +31,7 @@ public class ShootActivityTest extends ActivityInstrumentationTestCase2<ShootAct
 		
 		//Teste 1:
 		Intent intShootAct = new Intent(getInstrumentation().getTargetContext(), ShootActivity.class);		
+		intShootAct.putExtra("Teste", true);
 		setActivityIntent(intShootAct);
         atividadeEmTeste = getActivity();
         assertNotNull(atividadeEmTeste);

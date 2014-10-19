@@ -1,0 +1,40 @@
+package br.unb.cic.qrgame.ui.Test;
+
+import java.io.File;
+
+import android.app.Activity;
+import android.content.Intent;
+import android.os.Environment;
+import android.test.ActivityInstrumentationTestCase2;
+import br.unb.cic.qrgame.ui.ShootActivity;
+
+public class ShootActivityTest extends ActivityInstrumentationTestCase2<ShootActivity> {
+	Activity atividadeEmTeste = null;
+	File sd = Environment.getExternalStorageDirectory();
+	
+	public ShootActivityTest() {
+		
+		super(ShootActivity.class);
+		
+	}
+	
+	protected void setUp() throws Exception {
+		
+		super.setUp();
+				
+	}
+
+	/**
+	 * @Brief: testa se a activity de tiro foi executada corretamente.
+	 */
+	public void testActivityQRCode1(){
+		
+		//Teste 1:
+		Intent intShootAct = new Intent(getInstrumentation().getTargetContext(), ShootActivity.class);		
+		setActivityIntent(intShootAct);
+        atividadeEmTeste = getActivity();
+        assertNotNull(atividadeEmTeste);
+        
+	}
+	
+}

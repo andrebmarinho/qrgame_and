@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <launchConfiguration type="com.android.ide.eclipse.adt.junit.launchConfigurationType">
 <stringAttribute key="com.android.ide.eclipse.adt.instrumentation" value="android.test.InstrumentationTestRunner"/>
+<stringAttribute key="com.android.ide.eclipse.adt.last.used.device" value="192.168.56.101:5555"/>
+<booleanAttribute key="com.android.ide.eclipse.adt.reuse.last.used.device" value="true"/>
 <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_PATHS">
 <listEntry value="/QRCodeTest/src/br/unb/cic/qrgame/ui/Test/ShootActivityTest.java"/>
 </listAttribute>
