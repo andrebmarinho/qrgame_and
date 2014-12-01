@@ -3,7 +3,10 @@ package br.unb.cic.qrgame.ui;
 import java.io.IOException;
 import java.util.List;
 
+import com.google.zxing.common.BitMatrix;
+
 import br.unb.cic.qrgame.R;
+import br.unb.cic.qrgame.domain.Decodificador;
 import br.unb.cic.qrgame.domain.QRCode;
 import android.app.Activity;
 import android.graphics.Bitmap;
@@ -17,7 +20,8 @@ import android.widget.Toast;
 
 public class ShootActivity extends Activity implements SurfaceHolder.Callback, Camera.PreviewCallback{
 			
-	QRCode code;
+	QRCode cCode;
+	Decodificador decode;
 	Camera camera;
 	SurfaceView surfV;
 	Bitmap bmp = null;
@@ -31,13 +35,14 @@ public class ShootActivity extends Activity implements SurfaceHolder.Callback, C
 		if(getIntent().getExtras() != null)
 			Teste = getIntent().getExtras().getBoolean("Teste");
 		
-		code = new QRCode(getBaseContext());
+		decode = new Decodificador( getBaseContext() );
+		cCode = new QRCode( getBaseContext() );
 		camera = Camera.open();
 		this.scanQRCode();
 		
 	}
 	
-	//TODO: implementar o botão de tiro.
+	//TODO: implementar o botão de tiro. -- ADICIONAR camera.release() no método, para que outros aplicativos possam ter acesso a camera.
 		
 	/**
 	 * Por meio do scaneamento, obtém um bitmap (de possível QR code) que é posteriormente decodificado em uma string.
@@ -60,28 +65,18 @@ public class ShootActivity extends Activity implements SurfaceHolder.Callback, C
 		
 		int largura = camera.getParameters().getPreviewSize().width;
 		int altura = camera.getParameters().getPreviewSize().height;
-		tryDecode( code.bmpFromYUV(frame, largura, altura) );	
-		
-	}
-
-	/**
-	 * Tenta decodificar o frame.
-	 * @param bmp: tenta decodificar um arquivo bitmap.
-	 */
-	private void tryDecode(Bitmap bmp) {
-		if( bmp != null ){
-			
-			String str = QRCode.ERRO;
-			try {
-				str = code.decodeCode(bmp);
-			} catch (Exception e) {
-				//TODO: Escrever exceção em log.
-			}  
-			
-			if(!str.equals(QRCode.ERRO))
-        		Toast.makeText(ShootActivity.this, "Alvo atingido: " + str , Toast.LENGTH_SHORT).show();
-	        				
+		Bitmap liveImg = decode.bmpFromYUV(frame, largura, altura);		
+		BitMatrix matriz = decode.detector( decode.binaryBmpFromBmp(liveImg) );
+		if(matriz != null){
+			Bitmap bmpmat = cCode.createQRCBmp( matriz, matriz.getWidth(), matriz.getHeight()  );
+			if( decode.tryDecode( bmpmat ) ){
+				
+				Toast.makeText(ShootActivity.this, "Alvo na mira: " + decode.qrText , Toast.LENGTH_SHORT).show();
+	        	camera.stopPreview();
+	        	
+			}
 		}
+		
 	}
 
 	/**
@@ -110,43 +105,7 @@ public class ShootActivity extends Activity implements SurfaceHolder.Callback, C
         	//TODO:        	
         }
 	}
-	
-	/**
-	 * 
-	 */
-	/*//TODO: Criar retângulo onde deve ser posicionado e focalizado o qrcode.
-	private void drawScanRect() {
-		
-		Paint paint = new Paint();
-	    paint.setColor(Color.GREEN);
-	    paint.setStyle(Paint.Style.FILL_AND_STROKE);
-	    paint.setStrokeWidth(10);
-	    
-	    
-	    //Quadrado de 100x100 pixels formado a partir do centro da view de desenho.
-	    float x0 = surfVTransp.getX();
-	    float y0 = surfVTransp.getY();
-	    float largura = surfVTransp.getWidth();
-	    float altura = surfVTransp.getHeight();
-	    float centroX = x0 + largura / 2;
-	    float centroY = y0 + altura / 2;
-	    float esquerda = centroX - 100;
-	    float cima = centroY - 100;
-	    float direita = centroX + 100;
-	    float baixo = centroY + 100; 
-	    
-	    try{
-	    	
-	    	canvas.drawRect(esquerda, cima, direita, baixo, paint);
-	    	surfVTransp.getHolder().unlockCanvasAndPost(canvas);
-	    	
-	    } catch (Exception e){
-		    
-	    	Toast.makeText(ShootActivity.this, "Erro! " + e.getMessage(), Toast.LENGTH_SHORT).show();
-	   
-	    }
-	}*/
-	
+			
 	/**
 	 * Criação da surface view.
 	 * 

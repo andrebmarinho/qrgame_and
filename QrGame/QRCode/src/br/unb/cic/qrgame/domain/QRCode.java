@@ -1,39 +1,19 @@
 package br.unb.cic.qrgame.domain;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import com.google.zxing.common.BitMatrix;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.graphics.ImageFormat;
-import android.graphics.Rect;
-import android.graphics.YuvImage;
-import android.os.Environment;
-import android.widget.Toast;
-
-import com.google.zxing.BarcodeFormat;
-import com.google.zxing.BinaryBitmap;
-import com.google.zxing.MultiFormatReader;
-import com.google.zxing.RGBLuminanceSource;
-import com.google.zxing.Result;
-import com.google.zxing.common.HybridBinarizer;
-import com.google.zxing.common.BitMatrix;
-import com.google.zxing.WriterException;
-import com.google.zxing.qrcode.QRCodeWriter;
 
 public class QRCode {
 
-	private String qrText;
-	private Context context;
+	public String qrText;
+	protected Context context;
 	public static final String ERRO = new String("Erro na decodificação do código. Tente novamente.");
 	
 	/**
-	 * Construtor de quando não é necessário gerar um QRCode, apenas escanear algum.
+	 * Construtor de quando não é necessário gerar um QRCode, apenas escanear algum (decodificador).
 	 * @param context: contexto ativo do aplicativo.
 	 */
 	public QRCode(Context context){
@@ -56,49 +36,13 @@ public class QRCode {
 	}
 	
 	/**
-	 *  A partir de uma string, gera um QR code correspondente. 
-	 *	A string passada para o objeto é codificada em uma matriz
-	 *	do tipo QR code. A partir da matriz, é construído uma imagem bitmap do tipo ARG_8888.
-	 *	Essa imagem é comprimida em jpeg e salva pelo método saveBmp().
-	 *
-	 */
-	
-	public void encodeCode(){
-		
-		QRCodeWriter encoder = new QRCodeWriter();
-		BitMatrix matriz;
-		Bitmap bmp;
-		
-		try {
-			
-			//Codifica o nome do usuário em uma matriz do tipo QR_CODE
-		    matriz = encoder.encode(this.qrText, BarcodeFormat.QR_CODE, 400, 400);
-			bmp = createQRCBmp(matriz, matriz.getWidth(), matriz.getHeight());
-					    
-		    try{		    	
-		    	this.saveBmp(bmp);		    	
-		    } catch (FileNotFoundException eFile){		    			    
-		    	Toast.makeText(context, "Erro! " + eFile.getMessage(), Toast.LENGTH_SHORT).show();		  
-		    } catch (IOException eIO){		    
-		    	Toast.makeText(context, "Erro! " + eIO.getMessage(), Toast.LENGTH_SHORT).show();		   
-		    }
-		    		    
-		} catch (WriterException eEncoder) {						
-			Toast.makeText(context, "Erro! " + eEncoder.getMessage(), Toast.LENGTH_SHORT).show();
-		} catch (Exception otherError){			
-			Toast.makeText(context, "Erro! " + otherError.getMessage(), Toast.LENGTH_SHORT).show();
-		}
-				
-	}
-		
-	/**
-	 * A partir da matriz recebida, um bitmap de altura "altura" e largura "largura" é gerado.
+	 * A partir de uma matriz recebida de um qrcode, um bitmap de altura "altura" e largura "largura" é gerado.
 	 * @param matriz: recebe uma matriz que será salva em um bitmap
 	 * @param largura: largura da matriz
 	 * @param altura: altura da matriz
 	 * @return
 	 */
-	protected Bitmap createQRCBmp(BitMatrix matriz, int largura, int altura){
+	public Bitmap createQRCBmp(BitMatrix matriz, int largura, int altura){
 		
 		Bitmap bmp = Bitmap.createBitmap(largura, altura, Bitmap.Config.ARGB_8888);
 		
@@ -109,118 +53,6 @@ public class QRCode {
 	    
 	    return bmp;
 		
-	}
-	
-	/** 
-	 *  Salva a imagem do qrcode na memória externa do dispositivo.
-	 * 	A partir de um bitmap passado ao método, esse comprime a imagem para uma do tipo Jpeg
-	 * 	ao passo que a salva na memória externa do dispositivo utilizado.   
-	 * @param bmp: recebe um bitmap a ser salvo no dispositivo.
-	 * @throws FileNotFoundException, IOException
-	 * 		
-	 */	
-	public void saveBmp(Bitmap bmp) throws FileNotFoundException, IOException {
-		
-		File sd = Environment.getExternalStorageDirectory();
-		FileOutputStream saida = null;
-		
-		try {
-			
-			saida = new FileOutputStream(new File(sd, "QRcode.jpg"));
-		    
-		    if ( bmp.compress(Bitmap.CompressFormat.JPEG, 100, saida )){
-		    	Toast.makeText(context, "Arquivo QRcode.jpg salvo na memória externa com sucesso!", Toast.LENGTH_SHORT).show();
-		    	saida.close();
-		    } else {
-		    	Toast.makeText(context, "Não foi possível salvar o arquivo. Contate os desenvolvedores.", Toast.LENGTH_SHORT).show();
-		    }
-		    
-		} catch (FileNotFoundException e) {			
-			throw new FileNotFoundException("Erro ao salvar o arquivo! " + e.getMessage());		    		    
-		} 
-				
-	}
-
-	/**
-	 * Converte uma imagem de um arquivo em um bitmap.
-	 * A partir do endereço da imagem, o método decodifica uma imagem, se válida, em um bitmap.
-	 * @param filePath: caminho da imagem no dispositivo
-	 * @return bmp
-	 */	
-	public Bitmap imageToBmp(String filePath){
-		
-		Bitmap bmp = null;		
-		File arquivo = new File(filePath);
-		if(!arquivo.exists()) 
-			Toast.makeText(context, "Arquivo não encontrado.", Toast.LENGTH_SHORT).show();
-			
-		bmp = BitmapFactory.decodeFile(filePath);	
-		return bmp;
-		
-	}
-		
-	/**
-	 * Decodifica um bitmap de um QR code em uma string.
-	 * A partir do bitmap de um possível QR code, o método obtém uma matriz binária dele e decodifica o QR code em uma string.
-	 * @param bmp
-	 * @return
-	 * @throws Exception 
-	 */
-	public String decodeCode(Bitmap bmp) throws Exception{
-		
-        Result qrCodeMsg = null;        
-        BinaryBitmap bBmp = binaryBmpFromBmp(bmp); 
-        				
-		try {
-			qrCodeMsg = new MultiFormatReader().decode(bBmp);
-		} catch (Exception eFile) {
-			throw new Exception("Erro ao decodificar! " + eFile.getMessage());
-		}
-		
-		if( qrCodeMsg != null)
-			return qrCodeMsg.getText();
-		else
-			return(ERRO);
-		
-	}
-	
-	/**	 
-	 * Gerar um bitmap binário, para a decodificação do QR code.
-	 * @param bmp: recebe um bitmap
-	 * @return bBmp: retorna um bitmap binário
-	 */
-	protected BinaryBitmap binaryBmpFromBmp(Bitmap bmp){
-		
-		int altura = bmp.getHeight();
-		int largura = bmp.getWidth(); 
-        int[] matriz = new int[altura * largura];
-		bmp.getPixels(matriz, 0, largura, 0, 0, largura, altura);
-        bmp.recycle();
-        RGBLuminanceSource ilumRGB = new RGBLuminanceSource(largura, altura, matriz);
-        BinaryBitmap bBmp = new BinaryBitmap(new HybridBinarizer(ilumRGB));    
-        
-        return bBmp;
-		
-	}
-	
-	/**
-	 *  Converte a image do preview para um bitmap que pode ser processado.
-	 *  @param frame: adquire o frame atual que está na tela.
-	 *  @param largura: adquire a largura do frame
-	 *  @param altura: adquire a altura do frame
-	 *  @author techoolblogs
-	 *  Método e algoritmo obtido e modificado de "techoolblogs".
-	 *  @Reference: http://tech.thecoolblogs.com/2013/02/get-bitmap-image-from-yuv-in-android.html#ixzz3Gd5TdULI
-	 */
-	public Bitmap bmpFromYUV(byte[] frame, int largura, int altura) {
-		
-        ByteArrayOutputStream byteAOutS = new ByteArrayOutputStream();
-        YuvImage yuvimage = new YuvImage(frame, ImageFormat.NV21, largura, altura, null);
-        yuvimage.compressToJpeg( new Rect(0, 0, largura, altura), 80, byteAOutS );
-        BitmapFactory.Options bmpFOptions = new BitmapFactory.Options();
-        bmpFOptions.inPreferredConfig = Bitmap.Config.ARGB_8888;
-        return BitmapFactory.decodeByteArray(byteAOutS.toByteArray(), 0, byteAOutS.toByteArray().length, bmpFOptions);
-                
 	}
 	
 }
