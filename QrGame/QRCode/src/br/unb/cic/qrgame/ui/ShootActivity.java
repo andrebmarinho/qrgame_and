@@ -42,7 +42,7 @@ public class ShootActivity extends Activity implements SurfaceHolder.Callback, C
 		
 	}
 	
-	//TODO: implementar o botão de tiro. -- ADICIONAR camera.release() no método, para que outros aplicativos possam ter acesso a camera.
+	//TODO: ADICIONAR camera.release() no método, para que outros aplicativos possam ter acesso a camera.
 		
 	/**
 	 * Por meio do scaneamento, obtém um bitmap (de possível QR code) que é posteriormente decodificado em uma string.
@@ -71,7 +71,7 @@ public class ShootActivity extends Activity implements SurfaceHolder.Callback, C
 			Bitmap bmpmat = cCode.createQRCBmp( matriz, matriz.getWidth(), matriz.getHeight()  );
 			if( decode.tryDecode( bmpmat ) ){
 				
-				Toast.makeText(ShootActivity.this, "Alvo na mira: " + decode.qrText , Toast.LENGTH_SHORT).show();
+				Toast.makeText(ShootActivity.this, "Alvo atingido: " + decode.qrText , Toast.LENGTH_SHORT).show();
 	        	camera.stopPreview();
 	        	
 			}
@@ -96,10 +96,12 @@ public class ShootActivity extends Activity implements SurfaceHolder.Callback, C
         largura = dimensoes.get(0).width;
         altura = dimensoes.get(0).height;
         parametros.setPreviewSize(largura, altura);
+        parametros.set("orientation", "portrait");
         try{
         	camera.setParameters(parametros);
         	camera.setPreviewDisplay(holder);
         	camera.setPreviewCallback((PreviewCallback) ShootActivity.this);
+        	camera.setDisplayOrientation(90);
         	camera.startPreview();
         } catch (Exception eCam){
         	//TODO:        	
@@ -126,6 +128,8 @@ public class ShootActivity extends Activity implements SurfaceHolder.Callback, C
 	 */
 	@Override
 	public void surfaceDestroyed(SurfaceHolder holder) {
+		camera.release();
+		camera = null;
 	}
 	
 }
