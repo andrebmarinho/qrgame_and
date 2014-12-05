@@ -8,7 +8,7 @@ import android.graphics.Color;
 
 public class QRCode {
 
-	public String qrText;
+	private String qrText;
 	protected Context context;
 	public static final String ERRO = new String("Erro na decodificação do código. Tente novamente.");
 	
@@ -54,5 +54,19 @@ public class QRCode {
 	    return bmp;
 		
 	}
+
+	public void setQrText(String qrText) {
+		this.qrText = qrText;
+	}
+	
+	public String getQrText() {
+		return qrText;
+	}
+
+	public Context getContext() {
+		return context;
+	}
+	
+	
 	
 }

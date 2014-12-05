@@ -39,7 +39,7 @@ public class Codificador extends QRCode{
 		try {
 			
 			//Codifica o nome do usuário em uma matriz do tipo QR_CODE
-		    matriz = encoder.encode(this.qrText, BarcodeFormat.QR_CODE, 400, 400);
+		    matriz = encoder.encode(this.getQrText(), BarcodeFormat.QR_CODE, 400, 400);
 			bmp = createQRCBmp(matriz, matriz.getWidth(), matriz.getHeight());
 					    
 		    try{		    	

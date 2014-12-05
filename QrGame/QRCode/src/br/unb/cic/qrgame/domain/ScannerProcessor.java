@@ -20,7 +20,6 @@ public class ScannerProcessor extends QRCode {
 	
 	public ScannerProcessor(Context context) {
 		super(context);
-		// TODO Auto-generated constructor stub
 	}
 	
 	/**

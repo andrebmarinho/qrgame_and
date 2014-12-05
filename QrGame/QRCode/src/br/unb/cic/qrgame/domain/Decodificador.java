@@ -6,11 +6,13 @@ import com.google.zxing.BinaryBitmap;
 import com.google.zxing.MultiFormatReader;
 import com.google.zxing.RGBLuminanceSource;
 import com.google.zxing.Result;
+import com.google.zxing.common.BitMatrix;
 import com.google.zxing.common.HybridBinarizer;
 
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.hardware.Camera;
 import android.widget.Toast;
 
 public class Decodificador extends ScannerProcessor{
@@ -99,13 +101,30 @@ public class Decodificador extends ScannerProcessor{
 			if(!str.equals(QRCode.ERRO)){
 				
 				//TODO: Tratar acerto de tiro.
-				qrText = str;
+				setQrText(str);
 				return true;
 				
 			}
         					
 		}
 		return false;
+	}
+
+	public void processarFrame(Camera camera, byte[] frame) {
+		int largura = camera.getParameters().getPreviewSize().width;
+		int altura = camera.getParameters().getPreviewSize().height;
+		
+		Bitmap liveImg = bmpFromYUV(frame, largura, altura);		
+		BitMatrix matriz = detector( binaryBmpFromBmp(liveImg) );
+		if(matriz != null){
+			Bitmap bmpmat = createQRCBmp( matriz, matriz.getWidth(), matriz.getHeight()  );
+			if( tryDecode( bmpmat ) ){
+				
+				Toast.makeText(context, "Alvo atingido: " + getQrText() , Toast.LENGTH_SHORT).show();
+	        		        	
+			}
+		}
+		
 	}
 	
 	
